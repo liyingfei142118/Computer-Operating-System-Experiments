@@ -1,0 +1,16 @@
+virtual address [0-4M] => physical address [0-4M]
+
+outter page table 0x1000
+  第0项指向inner page table
+inner  page table 0x2000
+  第0项映射0-4K
+  第1项映射4K-8K
+  第2项映射8K-12K
+
+eax = 0|PTE_WRITE|PTE_PRESENT
+edi = inner page table base address
+for (ecx = 1024; ecx > 0; ecx--) {
+  [edi] = eax;
+  edi = edi + 4;
+  eax = eax + 4096;
+}
